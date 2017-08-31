@@ -59,3 +59,9 @@ up in the directory `__targets`.
 
 
 
+License
+-------
+
+Copyright (c) 2017 Torbjörn Rathsman.
+All rights reserved. Released under the [BSD-2-Clause license](LICENSE.txt).
+
