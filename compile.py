@@ -65,9 +65,13 @@ name_template=string.Template('''$FilenameNoExt::${IDENTIFIER},"$description"'''
 name_inv_template=string.Template('''"$description",$FilenameNoExt::${IDENTIFIER}''')
 
 module_dir = os.path.dirname(__file__)
+default_target_dir = os.path.join(module_dir, 'dist', 'nonfree')
 
 def write_error(*args, **kwargs):
 	print(*args,file=sys.stderr,**kwargs)
+
+def bfn_fxt(fn):
+	return os.path.splitext(os.path.basename(fn))
 
 def getidx(list, idx, dflt=None):
 	if len(list) > idx:
@@ -78,9 +82,7 @@ def compile(filename):
 	cli_args = sys.argv[1:]
 	if getidx(cli_args, 0) == '--': cli_args.pop(0)
 	try:
-		target_dir=getidx(cli_args, 0)
-		if target_dir is None:
-			raise RuntimeError('missing CLI arg: target_dir')
+		target_dir=getidx(cli_args, 0, default_target_dir)
 		in_dir=getidx(cli_args, 1, module_dir)
 
 		IDENTIFIER=0
@@ -88,7 +90,7 @@ def compile(filename):
 		DESCRIPTION=2
 		substitutes=dict()
 
-		(basefn, infile_fext) = os.path.splitext(os.path.basename(filename))
+		(basefn, infile_fext) = bfn_fxt(filename)
 		fnwords = basefn.split('_')
 		header_basefn = ''.join(fnwords) + '.hpp'
 		substitutes['FILENAME_NO_EXT']=''.join([w.upper() for w in fnwords])
@@ -129,3 +131,27 @@ def compile(filename):
 	except Exception:
 		write_error('%s:%d: error: %s\n'%(sys.argv[0],sys.exc_info()[2].tb_lineno,sys.exc_info()[1]))
 		sys.exit(-1)
+
+
+def compile_guess_data_file(caller):
+	compile(os.path.join('data', bfn_fxt(caller)[0] + '.csv'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+	raise RuntimeError("Direct invocation isn't supported yet." +
+		" Run one of the other files instead.")

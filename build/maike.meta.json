@@ -1,0 +1,9 @@
+﻿{ "targets": [
+    { "name": "__GEN:classname-lower__.hpp",
+      "dependencies": [
+        { "rel": "misc", "ref": "data/__GEN:tablename__.csv" },
+        { "rel": "misc", "ref": "compile.py" }
+        ]
+      }
+    ]
+}

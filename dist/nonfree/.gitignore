@@ -1,8 +1,12 @@
 
 /control_codes.csv
+/controlcodes.hpp
 /gm_drumkit.csv
 /gm_programs.csv
+/gmdrumkit.hpp
+/gmprograms.hpp
 /status_codes.csv
+/statuscodes.hpp
 
 /midiconst.json
 /midiconst.amd.js
