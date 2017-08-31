@@ -1,5 +1,8 @@
+#!/usr/bin/python3
+# -*- coding: UTF-8, tab-width: 4 -*-
+#
 # Copyright 2017 Torbjörn Rathsman
-
+#
 # Redistribution and use in source and binary forms, with or without modification, are permitted
 # provided that the following conditions are met:
 #
@@ -61,28 +64,39 @@ const_template=string.Template('''${IDENTIFIER}=$value    /**<$description*/''')
 name_template=string.Template('''$FilenameNoExt::${IDENTIFIER},"$description"''')
 name_inv_template=string.Template('''"$description",$FilenameNoExt::${IDENTIFIER}''')
 
+module_dir = os.path.dirname(__file__)
+
 def write_error(*args, **kwargs):
-    print(*args,file=sys.stderr,**kwargs)
+	print(*args,file=sys.stderr,**kwargs)
+
+def getidx(list, idx, dflt=None):
+	if len(list) > idx:
+		return list[idx]
+	return dflt
 
 def compile(filename):
+	cli_args = sys.argv[1:]
+	if getidx(cli_args, 0) == '--': cli_args.pop(0)
 	try:
-		target_dir=sys.argv[1];
-		in_dir=sys.argv[2];
+		if len(sys.argv) < 1:
+			raise RuntimeError('too few CLI args')
+		target_dir=getidx(cli_args, 0)
+		in_dir=getidx(cli_args, 1, module_dir)
 
 		IDENTIFIER=0
 		VALUE=1
 		DESCRIPTION=2
-		substitutes=dict();
+		substitutes=dict()
 
-		filename_no_ext=os.path.splitext(filename)[0]
-		substitutes['FILENAME_NO_EXT']=''.join( filename_no_ext.upper().split('_') )
-		substitutes['FilenameNoExt']=filename_no_ext.split('_')[0].capitalize()\
-			+filename_no_ext.split('_')[1].capitalize()
+		(basefn, infile_fext) = os.path.splitext(filename)
+		fnwords = basefn.split('_')
+		header_basefn = ''.join(fnwords) + '.hpp'
+		substitutes['FILENAME_NO_EXT']=''.join([w.upper() for w in fnwords])
+		substitutes['FilenameNoExt']=''.join([w.capitalize() for w in fnwords])
 		substitutes['filename']=filename
 		substitutes['date']=time.strftime('%Y-%m-%d %H:%M %Z')
 		substitutes['srcfile']=sys.argv[0]
-
-		with open(in_dir + '/' + filename,encoding='utf-8') as src:
+		with open(filename, encoding='utf-8') as src:
 			reader=csv.reader(src,delimiter=';')
 			table=list(reader)
 			table_parsed=list()
@@ -109,8 +123,7 @@ def compile(filename):
 				names.append(name_inv_template.substitute(constant))
 			substitutes['name_value']='}\n\t\t\t,{'.join(names)
 
-		with open(target_dir + '/' + in_dir + '/'  + ''.join(filename_no_ext.split('_')) \
-			+ '.hpp','wb') as output:
+		with open(os.path.join(target_dir, header_basefn), 'wb') as output:
 			output.write(file_template.substitute(substitutes).encode('utf-8'))
 		sys.exit(0)
 	except Exception:
