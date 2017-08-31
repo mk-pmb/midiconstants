@@ -1,6 +1,18 @@
+﻿
 # midiconstants -- An unofficial MIDI SDK
-This repository contains all (General)MIDI constants in semicolon delimited text
-files.
+This repository provides all (General)MIDI constants in several formats:
+  * CSV: semicolon delimited text files.
+  * C++ header files via Python:
+    `compile.py` can generate `.hpp` header files from the CSV files.
+  * Node.js package: Should work out of the box by reading the CSV files
+    synchronously(!!) at `require()` time.
+    If you want to use asynchronous module systems, use the JSON version.
+  * JSON: You can use the Node.js version to generate a plain JSON file
+    and an AMD-wrapped version in the `dist/nonfree/` folder:
+    run `nodejs csv2pojo.js --dist-json`
+
+
+
 
 ## Legal information
 I do not claim any copyright on the data files found in this repository. However,

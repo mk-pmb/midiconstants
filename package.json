@@ -1,0 +1,28 @@
+{ "name": "midiconstants-csv",
+  "version": "0.0.0",
+  "description": "An unofficial MIDI SDK.",
+  "keywords": [ "midi", "csv", "python" ],
+
+  "author": "Torbjörn Rathsman (http://milasudril.github.io/)",
+  "homepage": "https://github.com/milasudril/midiconstants/#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milasudril/midiconstants.git"
+  },
+  "bugs": {
+    "url": "https://github.com/milasudril/midiconstants/issues"
+  },
+  "contributors": [],
+
+  "private": false,
+  "license": "SEE LICENSE IN README.md",
+  "license_hint": "Some files released under BSD-2-Clause, some unlicensed.",
+
+  "main": "csv2pojo.js",
+  "dependencies": {
+    "export-module-csv-files-sync-pmb": "^1.0.0"
+   },
+
+
+  "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
+}

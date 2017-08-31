@@ -3,3 +3,6 @@
 /gm_drumkit.csv
 /gm_programs.csv
 /status_codes.csv
+
+/midiconst.json
+/midiconst.amd.js
