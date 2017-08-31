@@ -1,5 +1,5 @@
 { "name": "midiconstants-csv",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "An unofficial MIDI SDK.",
   "keywords": [ "midi", "csv", "python" ],
 
@@ -12,11 +12,11 @@
   "bugs": {
     "url": "https://github.com/milasudril/midiconstants/issues"
   },
-  "contributors": [],
+  "contributors": [
+    "M.K. (https://github.com/mk-pmb)"
+  ],
 
-  "private": false,
-  "license": "SEE LICENSE IN README.md",
-  "license_hint": "Some files released under BSD-2-Clause, some unlicensed.",
+  "private": false, "license": "BSD-2-Clause",
 
   "main": "csv2pojo.js",
   "dependencies": {
