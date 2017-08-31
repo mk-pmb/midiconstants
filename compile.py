@@ -78,9 +78,9 @@ def compile(filename):
 	cli_args = sys.argv[1:]
 	if getidx(cli_args, 0) == '--': cli_args.pop(0)
 	try:
-		if len(sys.argv) < 1:
-			raise RuntimeError('too few CLI args')
 		target_dir=getidx(cli_args, 0)
+		if target_dir is None:
+			raise RuntimeError('missing CLI arg: target_dir')
 		in_dir=getidx(cli_args, 1, module_dir)
 
 		IDENTIFIER=0
@@ -88,7 +88,7 @@ def compile(filename):
 		DESCRIPTION=2
 		substitutes=dict()
 
-		(basefn, infile_fext) = os.path.splitext(filename)
+		(basefn, infile_fext) = os.path.splitext(os.path.basename(filename))
 		fnwords = basefn.split('_')
 		header_basefn = ''.join(fnwords) + '.hpp'
 		substitutes['FILENAME_NO_EXT']=''.join([w.upper() for w in fnwords])
