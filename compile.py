@@ -13,11 +13,11 @@
 #    and the following disclaimer in the documentation and/or other materials provided with the
 #    distribution.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
 # IMPLIED WARRANTIES, INCLUDING, BUTNOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 # FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
 # CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
 # IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -28,6 +28,7 @@ import string
 import os
 import time
 import operator
+import json
 
 file_template=string.Template('''/*This file has been generated from $filename by
 $srcfile on $date.
@@ -133,8 +134,22 @@ def compile(filename):
 		sys.exit(-1)
 
 
-def compile_guess_data_file(caller):
-	compile(os.path.join('data', bfn_fxt(caller)[0] + '.csv'))
+def compile_guess_data_file(maike_meta_json):
+	maike_meta_json = maike_meta_json.strip()
+	if maike_meta_json[0:2] == '#@':
+		maike_meta_json = maike_meta_json[2:].replace('\n#@', '\n')
+	maike_meta = json.loads(maike_meta_json)
+	csv_files = []
+	for tgt in maike_meta['targets']:
+		for dep in tgt['dependencies']:
+			ref = dep['ref']
+			if ref.endswith('.csv'):
+				csv_files += [ref]
+	# print(csv_files)
+	if len(csv_files) != 1:
+		raise RuntimeError("Expected exactly one CSV file reference",
+							csv_files)
+	compile(os.path.join(csv_files[0]))
 
 
 
