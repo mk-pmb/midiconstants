@@ -8,9 +8,14 @@
 #   Instead, edit the template (__GEN:tplfn__)
 #   and re-run the generator (__GEN:tplprog__)
 #
-import compile
-# Guess the CSV filename from the maike meta data, so you can
-# rename the python file and it will still find its CSV:
-compile.compile_guess_data_file("""
+
+MAIKE_META = """
 __GEN:maike-meta__
-""")
+"""
+
+import compile
+# Guess the CSV file name from the maike JSON instead from the Python file
+# name, so you can rename the python file and it will still find its CSV:
+(csv_file,) = [ ref for ref in compile.maike_dep_refs(MAIKE_META)
+                    if ref.endswith('.csv') ]
+compile.compile(csv_file)

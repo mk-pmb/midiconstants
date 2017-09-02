@@ -134,22 +134,22 @@ def compile(filename):
 		sys.exit(-1)
 
 
-def compile_guess_data_file(maike_meta_json):
+def decode_maike_meta_json(maike_meta_json):
 	maike_meta_json = maike_meta_json.strip()
 	if maike_meta_json[0:2] == '#@':
 		maike_meta_json = maike_meta_json[2:].replace('\n#@', '\n')
-	maike_meta = json.loads(maike_meta_json)
-	csv_files = []
-	for tgt in maike_meta['targets']:
-		for dep in tgt['dependencies']:
-			ref = dep['ref']
-			if ref.endswith('.csv'):
-				csv_files += [ref]
-	# print(csv_files)
-	if len(csv_files) != 1:
-		raise RuntimeError("Expected exactly one CSV file reference",
-							csv_files)
-	compile(os.path.join(csv_files[0]))
+	return json.loads(maike_meta_json)
+
+
+def maike_dep_refs(maike_meta):
+	dep_refs = []
+	if not isinstance(maike_meta, dict):
+		maike_meta = decode_maike_meta_json(maike_meta)
+	for tgt in maike_meta.get('targets', []):
+		for dep in tgt.get('dependencies', []):
+			dep_refs.append(dep['ref'])
+	return dep_refs
+
 
 
 
