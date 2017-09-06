@@ -23,12 +23,21 @@ This free software edition is a reboot of Torbjörn Rathsman's original
 [`midiconstants` project][orig-proj]
 and does not include the actual CSV data due to license issues.
 
-Until we can find another source for these, you'll have to download
+Until we can find another source for these, you'll have to acquire
 them yourself. One easy way to do so is to run:
 
 ```bash
-$ ./build/download-data-files.sh
+$ ./prepare-nonfree-files.sh
 ```
+
+This will generate some of the files and download others. While
+  * the generators used are free software,
+  * permission to "implement" the GM1 spec was acquired,
+  * and in lots of jurisdictions no authorship protections can arise
+    from fully automatic work of a machine (artist's choice or
+    creation of machinery is a separate issue),
+their outputs coincide with works whose distribution TMA might try
+to restrict, so we treat these outputs as non-free data.
 
 
 &nbsp;

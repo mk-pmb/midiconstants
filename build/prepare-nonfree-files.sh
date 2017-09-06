@@ -7,21 +7,29 @@ function build () {
   local SELFPATH="$(readlink -m "$BASH_SOURCE"/..)"
   cd "$SELFPATH" || return $?
 
-  local DL_DIR='../dist/nonfree'
-  mkdir -p "$DL_DIR" || return $?
+  local NF_DIR='../dist/nonfree'
+  mkdir -p "$NF_DIR" || return $?
+
+  local CSV_FILES=(
+    control_codes
+    status_codes
+    )
+  local BFN=
+  for BFN in "${CSV_FILES[@]}"; do
+    echo -n "generate $BFN.csv: "
+    </dev/null nodejs -- "$SELFPATH"/drybake.js \
+      "../data/$BFN.dry.json" >"$NF_DIR"/"$BFN".csv || return $?
+    echo 'done.'
+  done
 
   local GH_USER='milasudril'
   local GH_REPO='midiconstants'
   local GH_COMMIT='c4b071e34acfd22f5bb6e96b6a2846704bd26737'
   local RAW_BASE="https://github.com/$GH_USER/$GH_REPO/raw/$GH_COMMIT/"
-  local CSV_FILES=(
-    control_codes
+  CSV_FILES=(
     gm_drumkit
     gm_programs
-    status_codes
     )
-
-  local BFN=
   for BFN in "${CSV_FILES[@]}"; do
     github_dl %.txt %.csv "$BFN" || return $?
   done
@@ -35,7 +43,7 @@ function github_dl () {
   local SAVE_PTN="$1"; shift
   local BFN="$1"; shift
   local DL_URL="$RAW_BASE${ORIG_PTN//%/$BFN}"
-  local SAVE_FN="$DL_DIR/${SAVE_PTN//%/$BFN}"
+  local SAVE_FN="$NF_DIR/${SAVE_PTN//%/$BFN}"
   echo -n "$FUNCNAME: $SAVE_FN"
   if [ -s "$SAVE_FN" ]; then
     echo ': already in cache.'

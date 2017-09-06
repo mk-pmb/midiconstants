@@ -20,7 +20,8 @@
 
   "main": "csv2pojo.js",
   "dependencies": {
-    "export-module-csv-files-sync-pmb": "^1.0.0"
+    "dry-id-table-pmb": "^0.1.2",
+    "export-module-csv-files-sync-pmb": "^1.0.1"
    },
 
 
